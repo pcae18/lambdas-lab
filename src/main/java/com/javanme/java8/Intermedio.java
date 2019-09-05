@@ -1,9 +1,17 @@
 package com.javanme.java8;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Clase con ejercicios nivel intermedio
@@ -24,7 +32,16 @@ public class Intermedio {
      * @see java.util.stream.Stream
      */
     public long ejercicio1(Path archivo) {
-        throw new UnsupportedOperationException();
+    	long numberLines = -1;
+    	try {
+    		numberLines = Files.lines(archivo)
+								//.filter(Predicate.not(String::isEmpty))
+    							.filter(l -> !l.isEmpty())
+    							.count();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return numberLines;
     }
 
     /**
@@ -40,7 +57,15 @@ public class Intermedio {
      * @see java.util.stream.IntStream
      */
     public OptionalInt ejercicio2(Path archivo) {
-        throw new UnsupportedOperationException();
+    	OptionalInt optional = null;
+    	try {
+    		optional = Files.lines(archivo)
+							.mapToInt(String::length)
+							.max();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return optional;
     }
 
     /**
@@ -61,7 +86,23 @@ public class Intermedio {
      * @see java.util.stream.Collectors
      */
     public String ejercicio3(Path archivo) {
-        throw new UnsupportedOperationException();
+    	String cadena = "";
+    	try {
+			cadena = Files.lines(archivo)
+							.map(l -> l.split(REGEXP))
+							.map(Arrays::stream)
+							.flatMap(Function.identity())
+							.filter(w -> !w.isEmpty())
+							.map(String::toLowerCase)
+							.distinct()
+							.sorted(Comparator
+									.comparingInt(String::length)
+									.thenComparing(Comparator.naturalOrder()))
+							.collect(Collectors.joining(" "));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return cadena;	
     }
 
     /**
@@ -80,7 +121,19 @@ public class Intermedio {
      * @see java.util.stream.Collectors
      */
     public Map<Integer, List<String>> ejercicio4(Path archivo) {
-        throw new UnsupportedOperationException();
+    	Map<Integer, List<String>> groupData = null;
+    	try {
+    		groupData = Files.lines(archivo)
+					    		.limit(10)
+					    		.map(l -> l.split(REGEXP))
+					    		.map(Arrays::stream)
+					    		.flatMap(Function.identity())
+					    		.filter(w -> !w.isEmpty())
+					    		.collect(Collectors.groupingBy(String::length));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return groupData;
     }
 
 
@@ -100,7 +153,19 @@ public class Intermedio {
      * @see java.util.stream.Collectors
      */
     public Map<String, Long> ejercicio5(Path archivo) {
-        throw new UnsupportedOperationException();
+    	Map<String, Long> groupData = null;
+    	try {
+    		groupData = Files.lines(archivo)
+    							.limit(100)
+    							.map(l -> l.split(REGEXP))
+    							.flatMap(Arrays::stream)
+    							.filter(w -> !w.isEmpty())
+    							.collect(Collectors.groupingBy(Function.identity(),
+    										Collectors.counting()));
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return groupData;
     }
 
     /**
@@ -127,7 +192,24 @@ public class Intermedio {
      * @see java.util.stream.Collectors
      */
     public Map<String, Map<Integer, List<String>>> ejercicio6(Path archivo) {
-        throw new UnsupportedOperationException();
+    	Map<String, Map<Integer, List<String>>> groupData = null;
+    	try {
+    		groupData = Files.lines(archivo)
+    							.limit(100)
+    							.map(l -> l.split(REGEXP))
+    							.flatMap(Arrays::stream)
+    							.filter(w -> !w.isEmpty())
+    							.distinct()
+    							.map(String::toLowerCase)
+    							.peek(System.out::println)
+    							.collect(Collectors.groupingBy(groupByInitialWordMayus,
+    											Collectors.groupingBy(String::length
+    											)));
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return groupData;
     }
+    Function<String, String> groupByInitialWordMayus = x -> x.substring(0, 1).toUpperCase();
 }
 

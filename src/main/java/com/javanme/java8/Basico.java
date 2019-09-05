@@ -1,6 +1,9 @@
 package com.javanme.java8;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Clase con ejercicios nivel básico
@@ -17,7 +20,10 @@ public class Basico {
      * @return Lista que contiene las palabras en mayúsculas
      */
     public List<String> ejercicio1(List<String> palabras) {
-        throw new UnsupportedOperationException();
+    	return palabras
+    			.stream()
+    				.map(String::toUpperCase)
+    					.collect(Collectors.toList());
     }
 
     /**
@@ -29,7 +35,12 @@ public class Basico {
      * @return lista que contiene cadenas de texto cuyo tamaño de caracteres es superior a 10
      */
     public List<String> ejercicio2(List<String> listado) {
-        throw new UnsupportedOperationException();
+    	List<String> listadoAux = new ArrayList<String>(listado); 
+    	listadoAux = listadoAux
+			    		.stream()
+			    			.filter(x -> x.length() > 10)
+			    				.collect(Collectors.toList());
+    	return listadoAux;
     }
 
     /**
@@ -42,7 +53,13 @@ public class Basico {
      * @see java.util.stream.Collectors
      */
     public String ejercicio3(List<String> listado) {
-        throw new UnsupportedOperationException();
+    	String palabra = "";
+    	palabra = listado
+		    		.stream()
+		    			.skip(2)
+		    				.limit(3)
+		    					.collect(Collectors.joining("-"));
+    	return palabra;
     }
 
     /**
@@ -56,7 +73,11 @@ public class Basico {
      * @see java.util.stream.Collectors
      */
     public List<Integer> ejercicio4(List<String> listado) {
-        throw new UnsupportedOperationException();
+    	return listado
+	    		.stream()
+	    			.map(Integer::parseInt)
+    					.sorted()
+    						.collect(Collectors.toList());
     }
 
     /**
@@ -70,6 +91,11 @@ public class Basico {
      * @see java.util.stream.Collectors
      */
     public List<String> ejercicio5(List<String> listado) {
-        throw new UnsupportedOperationException();
+    	Comparator<String> cmp = Comparator.comparingInt(String::length)
+    								.thenComparing(String.CASE_INSENSITIVE_ORDER);
+    	return listado
+    				.stream()
+    					.sorted(cmp)
+    						.collect(Collectors.toList());
     }
 }

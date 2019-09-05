@@ -18,7 +18,8 @@ public class Avanzado {
      * @return Suma de los números pasados por param.
      */
     public int ejercicio1(List<Integer> numeros) {
-        throw new UnsupportedOperationException();
+    	return numeros.stream()
+    					.reduce(0, (x, y) -> x + y);
     }
 
     /**
@@ -30,6 +31,9 @@ public class Avanzado {
      * @return El máximo de los números pasados por param.
      */
     public long ejercicio2(List<Long> numeros) {
-        throw new UnsupportedOperationException();
+    	return numeros.stream()
+    					.reduce(Long::max)
+    						.get();
+    			
     }
 }
